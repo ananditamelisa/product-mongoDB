@@ -1,5 +1,6 @@
 package com.example.productmongo.controller;
 
+import com.example.productmongo.api.ApiKey;
 import com.example.productmongo.entity.Product;
 import com.example.productmongo.service.ProductService;
 import com.example.productmongo.validation.ValidationHelper;
@@ -20,6 +21,14 @@ public class ProductController {
     public ProductController(ProductService productService, ValidationHelper validationHelper) {
         this.productService = productService;
         this.validationHelper = validationHelper;
+    }
+
+    @RequestMapping(
+            value = "/",
+            method = RequestMethod.GET
+    )
+    public String hello (ApiKey apiKey){
+        return "Hello World";
     }
 
     @CrossOrigin
