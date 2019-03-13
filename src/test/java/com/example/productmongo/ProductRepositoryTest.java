@@ -8,8 +8,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import reactor.core.publisher.Mono;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -50,8 +51,51 @@ public class ProductRepositoryTest {
         productRepository.save(new Product(3L, "Two Very Naughty Piglets",
                 "Fables and Animal Stories", "Lesley Glover",
                 50000, 50)).block();
-        Mono<Product> products = productRepository.findById(3L);
-        //Assert.assertTrue(products.);
+        Product products = productRepository.findById(3L).block();
+        Assert.assertTrue(products.getName().equals("Two Very Naughty Piglets"));
     }
+
+    @Test
+    public void testUpdateProduct(){
+        productRepository.deleteAll().block();
+        productRepository.save(new Product(1L, "Giraffes Cant Dance",
+                "Fables and Animal Stories", "Giles Andrese",
+                50000, 50)).block();
+        Product product = productRepository.save(new Product(1L, "Giraffes Should Dance",
+                "Fables and Animal Stories", "Giles Andrese",
+                50000, 50)).block();
+
+        Assert.assertTrue(productRepository.findById(1L).block().getName().equals("Giraffes Should Dance"));
+    }
+
+    @Test
+    public void testSaveAllProduct(){
+        Product product = new Product(1L, "Giraffes Cant Dance",
+                "Fables and Animal Stories", "Giles Andrese",
+                50000, 50);
+        Product product2 = new Product(2L, "Twinkle Little Star",
+                "Rhymes and Poetry", "Anastasia Swift",
+                50000, 50);
+        List<Product> listProduct = new ArrayList<>();
+        listProduct.add(product);
+        listProduct.add(product2);
+        List<Product> p = productRepository.saveAll(listProduct).collectList().block();
+        Assert.assertTrue(p.size()==2);
+    }
+
+    @Test
+    public void testDeleteProduct(){
+        Product product = new Product(1L, "Giraffes Cant Dance",
+                "Fables and Animal Stories", "Giles Andrese",
+                50000, 50);
+        productRepository.save(product).block();
+        Product product2 = new Product(2L, "Twinkle Little Star",
+                "Rhymes and Poetry", "Anastasia Swift",
+                50000, 50);
+        productRepository.save(product2).block();
+        productRepository.deleteById(2L).block();
+        Assert.assertNull("Harusnya gaada nih product2",productRepository.findById(2L).block());
+    }
+
 
 }

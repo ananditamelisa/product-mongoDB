@@ -44,4 +44,13 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id)
                 .flatMap(value-> productRepository.deleteById(id).thenReturn(value));
     }
+    public Mono<Product> edit (Long id, String name){
+        return productRepository.findById(id)
+                .map(product -> editProductName(name, product))
+                .flatMap(value -> productRepository.save(value));
+    }
+    private Product editProductName (String name, Product product){
+        product.setName(name);
+        return product;
+    }
 }

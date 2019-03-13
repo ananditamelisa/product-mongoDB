@@ -10,7 +10,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import java.nio.file.Path;
 
 
 @RestController
@@ -23,6 +22,7 @@ public class ProductController {
         this.validationHelper = validationHelper;
     }
 
+    @CrossOrigin
     @RequestMapping(
             value="/products",
             method = RequestMethod.POST,
@@ -35,6 +35,7 @@ public class ProductController {
                 .subscribeOn(Schedulers.elastic());
     }
 
+    @CrossOrigin
     @RequestMapping(
             value = "/products",
             method = RequestMethod.GET,
@@ -44,6 +45,7 @@ public class ProductController {
         return productService.findAll().subscribeOn(Schedulers.elastic());
     }
 
+    @CrossOrigin
     @RequestMapping(
             value = "/products/{idProduct}",
             method = RequestMethod.GET,
@@ -53,6 +55,7 @@ public class ProductController {
         return productService.findById(id).subscribeOn(Schedulers.elastic());
     }
 
+    @CrossOrigin
     @RequestMapping(
             value = "/products/delete/{idProduct}",
             method = RequestMethod.POST,
@@ -63,6 +66,7 @@ public class ProductController {
         return productService.delete(id).subscribeOn(Schedulers.elastic());
     }
 
+    @CrossOrigin
     @RequestMapping(
             value = "/products/update/{idProduct}",
             method = RequestMethod.POST,
